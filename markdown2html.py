@@ -20,15 +20,27 @@ if __name__ == "__main__":
 
     with open(sys.argv[1]) as r:
         with open(sys.argv[2], 'w') as w:
+            change_status = False
             for line in r:
                 length = len(line)
                 headings = line.lstrip('#')
                 heading_count = length - len(headings)
+                unordered = line.lstrip('-')
+                unordered_count = length - len(unordered)
 
                 if 1 <= heading_count <= 6:
                     line = '<h{}>'.format(
                         heading_count) + headings.strip() + '</h{}>\n'.format(
                         heading_count)
+
+                if unordered_count:
+                    if not change_status:
+                        w.write('<ul>\n')
+                        change_status = True
+                    line = '<li>' + unordered.strip() + '</li>\n'
+                if change_status and not unordered_count:
+                    w.write('</ul>\n')
+                    change_status = False
 
                 if length > 1:
                     w.write(line)
