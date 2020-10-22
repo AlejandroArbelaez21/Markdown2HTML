@@ -27,6 +27,8 @@ if __name__ == "__main__":
                 heading_count = length - len(headings)
                 unordered = line.lstrip('-')
                 unordered_count = length - len(unordered)
+                ordered = line.lstrip('*')
+                ordered_count = length - len(ordered)
 
                 if 1 <= heading_count <= 6:
                     line = '<h{}>'.format(
@@ -40,6 +42,15 @@ if __name__ == "__main__":
                     line = '<li>' + unordered.strip() + '</li>\n'
                 if change_status and not unordered_count:
                     w.write('</ul>\n')
+                    change_status = False
+
+                if ordered_count:
+                    if not change_status:
+                        w.write('<ol>\n')
+                        change_status = True
+                    line = '<li>' + ordered.strip() + '</li>\n'
+                if change_status and not ordered_count:
+                    w.write('</ol>\n')
                     change_status = False
 
                 if length > 1:
