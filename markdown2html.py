@@ -29,6 +29,19 @@ if __name__ == "__main__":
                 line = line.replace('__', '<em>', 1)
                 line = line.replace('__', '</em>', 1)
 
+                md5 = re.findall(r'\[\[.+?\]\]', line)
+                md5_inside = re.findall(r'\[\[(.+?)\]\]', line)
+                if md5:
+                    line = line.replace(md5[0], hashlib.md5(
+                        md5_inside[0].encode()).hexdigest())
+
+                delete_c = re.findall(r'\(\(.+?\)\)', line)
+                remove_c_inside = re.findall(r'\(\((.+?)\)\)', line)
+                if delete_c:
+                    remove_c_inside = ''.join(
+                        c for c in remove_c_inside[0] if c not in 'Cc')
+                    line = line.replace(delete_c[0], remove_c_inside)
+
                 length = len(line)
                 headings = line.lstrip('#')
                 heading_count = length - len(headings)
