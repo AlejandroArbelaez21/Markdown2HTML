@@ -24,6 +24,11 @@ if __name__ == "__main__":
             ordered_status = False
             paragraph = False
             for line in r:
+                line = line.replace('**', '<b>', 1)
+                line = line.replace('**', '</b>', 1)
+                line = line.replace('__', '<em>', 1)
+                line = line.replace('__', '</em>', 1)
+
                 length = len(line)
                 headings = line.lstrip('#')
                 heading_count = length - len(headings)
@@ -72,5 +77,7 @@ if __name__ == "__main__":
                 w.write('</ol>\n')
             if paragraph:
                 w.write('</p>\n')
+
+
 
     exit(0)
